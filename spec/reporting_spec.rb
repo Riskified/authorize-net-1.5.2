@@ -215,10 +215,10 @@ describe AuthorizeNet::Reporting do
     it "should be able to build a batch statistics entity" do
       # stub our connection response
       net_response = Net::HTTPOK.new('1.1', 200, 'OK')
-      net_response.stub!(:body).and_return(@response)
+      net_response.stub(:body).and_return(@response)
       connection = Net::HTTP.new('http://www.example.com')
-      connection.stub!(:start).and_return(net_response)
-      Net::HTTP.stub!(:new).and_return(connection)
+      connection.stub(:start).and_return(net_response)
+      Net::HTTP.stub(:new).and_return(connection)
       
       transaction = AuthorizeNet::Reporting::Transaction.new(@api_login, @api_key, :gateway => :sandbox)
       transaction.should respond_to(:get_settled_batch_list)
@@ -287,10 +287,10 @@ describe AuthorizeNet::Reporting do
       
       # stub our connection response
       net_response = Net::HTTPOK.new('1.1', 200, 'OK')
-      net_response.stub!(:body).and_return(@response)
+      net_response.stub(:body).and_return(@response)
       connection = Net::HTTP.new('http://www.example.com')
-      connection.stub!(:start).and_return(net_response)
-      Net::HTTP.stub!(:new).and_return(connection)
+      connection.stub(:start).and_return(net_response)
+      Net::HTTP.stub(:new).and_return(connection)
       
       transaction = AuthorizeNet::Reporting::Transaction.new(@api_login, @api_key, :gateway => :sandbox)
       transaction.should respond_to(:get_transaction_list)
@@ -364,6 +364,11 @@ describe AuthorizeNet::Reporting do
             </lineItem>
           </lineItems>
           <taxExempt>false</taxExempt>
+          <tax>
+            <amount>4</amount>
+            <name>tax-name</name>
+            <description>tax-description</description>
+          </tax>
           <payment>
             <creditCard>
               <cardNumber>XXXX1111</cardNumber>
@@ -387,10 +392,10 @@ describe AuthorizeNet::Reporting do
       
       # stub our connection response
       net_response = Net::HTTPOK.new('1.1', 200, 'OK')
-      net_response.stub!(:body).and_return(@response)
+      net_response.stub(:body).and_return(@response)
       connection = Net::HTTP.new('http://www.example.com')
-      connection.stub!(:start).and_return(net_response)
-      Net::HTTP.stub!(:new).and_return(connection)
+      connection.stub(:start).and_return(net_response)
+      Net::HTTP.stub(:new).and_return(connection)
       
       transaction = AuthorizeNet::Reporting::Transaction.new(@api_login, @api_key, :gateway => :sandbox)
       transaction.should respond_to(:get_transaction_details)
@@ -414,6 +419,9 @@ describe AuthorizeNet::Reporting do
       transaction.order.line_items.length.should == 2
       transaction.order.line_items[0].should be_kind_of(AuthorizeNet::LineItem)
       transaction.order.tax_exempt.should be_false
+      transaction.order.tax_amount.should eq(4)
+      transaction.order.tax_name.should eq('tax-name')
+      transaction.order.tax_description.should eq('tax-description')
       
       transaction.payment_method.should be_kind_of(AuthorizeNet::CreditCard)
       transaction.payment_method.card_number.should == 'XXXX1111'
