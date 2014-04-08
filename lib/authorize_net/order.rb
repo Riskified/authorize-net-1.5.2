@@ -5,7 +5,7 @@ module AuthorizeNet
     
     include AuthorizeNet::Model
     
-    attr_accessor :invoice_num, :description, :tax, :tax_amount, :tax_name, :tax_description, :freight, :freight_name, :freight_description, :duty, :duty_name, :duty_description, :tax_exempt, :po_num, :line_items
+    attr_accessor :invoice_num, :description, :tax, :tax_amount, :tax_name, :tax_description, :freight, :freight_name, :freight_description, :duty, :duty_name, :duty_description, :tax_exempt, :po_num, :line_items, :duty_amount, :shipping_amount, :shipping_name, :shipping_description
     
     def add_line_item(id = nil, name = nil, description = nil, quantity = nil, price = nil, taxable = nil)
       if id.kind_of?(AuthorizeNet::LineItem)
@@ -31,6 +31,10 @@ module AuthorizeNet
         :duty_description => @duty_description,
         :tax_exempt => @tax_exempt,
         :po_num => @po_num,
+        :duty_amount => @duty_amount,
+        :shipping_amount => @shipping_amount,
+        :shipping_name => @shipping_name,
+        :shipping_description => @shipping_description,
         :line_items => handle_multivalue_hashing(@line_items)
       }
       hash.delete_if {|k, v| v.nil?}
